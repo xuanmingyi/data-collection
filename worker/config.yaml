@@ -1,0 +1,19 @@
+node: mywindows
+
+etcd:
+  host: 172.16.0.105
+  port: 2379
+  auth: false
+  username: admin
+  password: admin
+
+report:
+  name: sss
+  ss: ddd
+
+plugins:
+  - name: crawl_baidu_com
+    type: buildin
+  - name: crwal_flsfls
+    type: extern
+    cmd: python flsfls.py
