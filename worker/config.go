@@ -20,6 +20,7 @@ type plugin struct {
 }
 
 type config struct {
+	License string `yaml:"license"`
 	Node string `yaml:"node"`
 	Etcd etcd `yaml:"etcd"`
 	Report map[string]string `yaml:"report"`

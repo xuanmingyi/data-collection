@@ -11,9 +11,8 @@ report:
   name: sss
   ss: ddd
 
+license: "ssss"
+
 plugins:
-  - name: crawl_baidu_com
+  - name: ig507
     type: buildin
-  - name: crwal_flsfls
-    type: extern
-    cmd: python flsfls.py
