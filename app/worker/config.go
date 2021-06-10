@@ -20,11 +20,11 @@ type plugin struct {
 }
 
 type config struct {
-	License string `yaml:"license"`
-	Node string `yaml:"node"`
-	Etcd etcd `yaml:"etcd"`
-	Report map[string]string `yaml:"report"`
-	Plugins []plugin `yaml:"plugins"`
+	License string            `yaml:"license"`
+	Node    string            `yaml:"node"`
+	Etcd    etcd              `yaml:"etcd"`
+	Report  map[string]string `yaml:"report"`
+	Plugins []plugin          `yaml:"plugins"`
 }
 
 var Config *config
