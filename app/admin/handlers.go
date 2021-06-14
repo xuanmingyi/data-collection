@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 )
 
+// 静态文件
 type SPAHandler struct {
 	IndexPath  string
 	StaticPath string
@@ -33,6 +34,7 @@ func (h SPAHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	http.FileServer(http.Dir(h.StaticPath)).ServeHTTP(w, r)
 }
 
+// 服务
 type Service struct {
 	ID        int      `json:"id"`
 	Name      string   `json:"name"`
@@ -49,6 +51,7 @@ type ServiceResponse struct {
 
 func ServiceHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-type", "application/json")
 
 	var rsp ServiceResponse
 
