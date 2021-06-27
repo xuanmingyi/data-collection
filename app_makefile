@@ -1,5 +1,7 @@
 GOPATH:=$(shell go env GOPATH)
 #VERSION:=$(shell git describe --tags --alwags)
+APP_RELATIVE_PATH=$(shell a=`basename $$PWD` && cd .. && b=`basename $$PWD` && echo $$b/$$a)
+
 
 .PHONY: init
 # init env
@@ -17,4 +19,5 @@ init:
 
 .PHONY: app
 app:
+	echo $APP_RELATIVE_PATH
 	mkdir -p bin/ && go build -o ./bin/ ./...

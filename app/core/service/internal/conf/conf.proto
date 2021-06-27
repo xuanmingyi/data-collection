@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+message Trace {
+    string endpoint = 1;
+}
+
+message Data {
+    message MongoDB {
+        string uri = 1;
+        string database = 2;
+    }
+    MongoDB mongodb = 1;
+}
