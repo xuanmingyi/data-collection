@@ -1,18 +1,18 @@
 package main
 
 import (
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
 )
 
 type etcd struct {
-	Host string `yaml:"host"`
-	Port int `yaml:"port"`
-	Auth bool `yaml:"auth"`
+	Host     string `yaml:"host"`
+	Port     int    `yaml:"port"`
+	Auth     bool   `yaml:"auth"`
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
-
 
 type config struct {
 	Etcd etcd `yaml:"etcd"`

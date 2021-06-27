@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	clientv3 "go.etcd.io/etcd/client/v3"
 	"log"
 	"os"
 	"os/signal"
@@ -12,21 +11,23 @@ import (
 	"sync"
 	"syscall"
 	"time"
+
+	clientv3 "go.etcd.io/etcd/client/v3"
 )
 
-type Node  struct {
-	MemoryTotal int64 `json:"mem_total"`
-	MemoryUsed int64 `json:"mem_used"`
-	MemoryFree int64 `json:"mem_free"`
-	CPU int32 `json:"cpu"`
-	Now time.Time `json:"now"`
-	Tasks []string `json:"tasks"`
+type Node struct {
+	MemoryTotal int64     `json:"mem_total"`
+	MemoryUsed  int64     `json:"mem_used"`
+	MemoryFree  int64     `json:"mem_free"`
+	CPU         int32     `json:"cpu"`
+	Now         time.Time `json:"now"`
+	Tasks       []string  `json:"tasks"`
 }
 
 type Core struct {
 	Client *clientv3.Client
-	Ctx context.Context
-	WG *sync.WaitGroup
+	Ctx    context.Context
+	WG     *sync.WaitGroup
 
 	// node infos
 	Nodes map[string]*Node
@@ -35,7 +36,7 @@ type Core struct {
 	Tasks map[string][]string
 }
 
-func NewCore(Config *config, ctx context.Context, wg *sync.WaitGroup) (core *Core, err error){
+func NewCore(Config *config, ctx context.Context, wg *sync.WaitGroup) (core *Core, err error) {
 	core = new(Core)
 	err = core.Init(ctx, wg)
 	if err != nil {
@@ -49,7 +50,7 @@ func (core *Core) Init(ctx context.Context, wg *sync.WaitGroup) (err error) {
 	endpoints = append(endpoints, fmt.Sprintf("%s:%d", Config.Etcd.Host, Config.Etcd.Port))
 
 	core.Client, err = clientv3.New(clientv3.Config{
-		Endpoints: endpoints,
+		Endpoints:   endpoints,
 		DialTimeout: 5 * time.Second,
 	})
 	if err != nil {
@@ -71,9 +72,9 @@ func (core *Core) Close() {
 
 func (core *Core) UpdateTask(node *Node, msg *Node) {
 	// task in msg, but task not in node, add
-	for _, task := range(msg.Tasks) {
+	for _, task := range msg.Tasks {
 		flag := false
-		for i, _ := range(node.Tasks) {
+		for i, _ := range node.Tasks {
 			if task == node.Tasks[i] {
 				flag = true
 				break
@@ -88,9 +89,9 @@ func (core *Core) UpdateTask(node *Node, msg *Node) {
 	}
 
 	// task in node, but task not in msg, delete
-	for _, task := range(node.Tasks) {
+	for _, task := range node.Tasks {
 		flag := false
-		for i, _ := range(msg.Tasks) {
+		for i, _ := range msg.Tasks {
 			if task == msg.Tasks[i] {
 				flag = true
 				break
@@ -104,12 +105,12 @@ func (core *Core) UpdateTask(node *Node, msg *Node) {
 }
 
 // watch /node/*
-func (core *Core) WatchNode() (err error){
+func (core *Core) WatchNode() (err error) {
 	responses := core.Client.Watch(core.Ctx, "/node", clientv3.WithPrefix())
 	for {
 		select {
 		case response := <-responses:
-			for _, ev := range(response.Events){
+			for _, ev := range response.Events {
 				if ev.Type == clientv3.EventTypePut {
 					// 更新
 					fmt.Printf("%s %q : %q\n", ev.Type, ev.Kv.Key, ev.Kv.Value)
@@ -126,7 +127,7 @@ func (core *Core) WatchNode() (err error){
 					node.Now = msg.Now
 
 					core.UpdateTask(node, &msg)
-				}else if ev.Type == clientv3.EventTypeDelete {
+				} else if ev.Type == clientv3.EventTypeDelete {
 					// 删除
 				} else {
 					fmt.Printf("%s %q : %q\n", ev.Type, ev.Kv.Key, ev.Kv.Value)
@@ -140,26 +141,26 @@ func (core *Core) WatchNode() (err error){
 	}
 }
 
-func (core *Core) FindNode(task string) (node string){
+func (core *Core) FindNode(task string) (node string) {
 	return "node1"
 }
 
-func (core *Core) Scheduler() (err error){
+func (core *Core) Scheduler() (err error) {
 	responses := core.Client.Watch(core.Ctx, "/rpc", clientv3.WithPrefix())
 	for {
 		select {
 		case response := <-responses:
-			for _, ev := range(response.Events) {
+			for _, ev := range response.Events {
 				if ev.Type == clientv3.EventTypePut {
 					names := strings.Split(string(ev.Kv.Key), "/")
 					node := core.FindNode(names[2])
 					k := fmt.Sprintf("/call/%s_%s/%s/request", names[2], node, names[3])
 					core.Client.Put(core.Ctx, k, string(ev.Kv.Value))
 					core.Client.Delete(core.Ctx, string(ev.Kv.Key))
-				}else if ev.Type == clientv3.EventTypeDelete {
+				} else if ev.Type == clientv3.EventTypeDelete {
 					// delete
 					fmt.Printf("delete successfully\n")
-				}else {
+				} else {
 					fmt.Printf("%s %q : %q\n", ev.Type, ev.Kv.Key, ev.Kv.Value)
 				}
 			}
@@ -170,9 +171,6 @@ func (core *Core) Scheduler() (err error){
 		}
 	}
 }
-
-
-
 
 func main() {
 	var wg sync.WaitGroup

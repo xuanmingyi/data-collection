@@ -1,14 +1,18 @@
-.PHONY: api
+.PHONY: all
+all:
+	cd app/core/service && make app
+
+#.PHONY: api
 # genreate api
-api:
-	find app -mindepth 2 -maxdepth 2 -type d -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) app'
+#api:
+#	find app -mindepth 2 -maxdepth 2 -type d -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) app'
 
-.PHONY: wire
+#.PHONY: wire
 # generate wire
-wire:
-	find app -mindepth 2 -maxdepth 2 -type d -print
+#wire:
+#	find app -mindepth 2 -maxdepth 2 -type d -print
 
-.PHONY: proto
+#.PHONY: proto
 # generate proto
-proto:
-	find app -mindepth 2 -maxdepth 2 -type d -print
+#proto:
+#	find app -mindepth 2 -maxdepth 2 -type d -print

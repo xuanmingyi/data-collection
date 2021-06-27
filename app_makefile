@@ -1,5 +1,5 @@
 GOPATH:=$(shell go env GOPATH)
-VERSION:=$(shell git describe --tags --alwags)
+#VERSION:=$(shell git describe --tags --alwags)
 
 .PHONY: init
 # init env
@@ -12,5 +12,9 @@ init:
 
 
 
-.PHONY: api
-api: grpc http swagger errors
+#.PHONY: api
+#api: grpc http swagger errors
+
+.PHONY: app
+app:
+	mkdir -p bin/ && go build -o ./bin/ ./...
