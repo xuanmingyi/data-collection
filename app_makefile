@@ -1,7 +1,11 @@
 GOPATH:=$(shell go env GOPATH)
-#VERSION:=$(shell git describe --tags --alwags)
+VERSION:=$(shell cat version.txt)
 APP_RELATIVE_PATH=$(shell a=`basename $$PWD` && cd .. && b=`basename $$PWD` && echo $$b/$$a)
 
+.PHONY: app
+app:
+	echo ${APP_RELATIVE_PATH}
+	mkdir -p bin/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
 
 .PHONY: init
 # init env
@@ -16,8 +20,3 @@ init:
 
 #.PHONY: api
 #api: grpc http swagger errors
-
-.PHONY: app
-app:
-	echo $APP_RELATIVE_PATH
-	mkdir -p bin/ && go build -o ./bin/ ./...

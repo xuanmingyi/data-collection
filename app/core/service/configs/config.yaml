@@ -4,4 +4,3 @@ etcd:
   auth: false
   username: admin
   password: admin
-

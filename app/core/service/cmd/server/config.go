@@ -1,5 +1,6 @@
 package main
 
+/*
 import (
 	"io/ioutil"
 
@@ -35,3 +36,4 @@ func NewConfig(path string) (*config, error) {
 	}
 	return Config, nil
 }
+*/
