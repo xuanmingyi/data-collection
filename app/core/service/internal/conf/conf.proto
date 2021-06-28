@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "app/core/service/internal/conf;conf";
+
 message Trace {
     string endpoint = 1;
 }

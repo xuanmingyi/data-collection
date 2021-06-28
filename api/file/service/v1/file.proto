@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto"
+
+option go_package = "api/file/service/v1;v1";
+
+service File {
+    rpc AddFile(AddFileReq) returns (AddFileReply) {}
+    rpc GetFile(GetFileReq) returns (GetFileReply) {}
+    rpc DeleteFile(DeleteFileReq) returns (DeleteFileReply) {}
+}
+
+message AddFileReq {
+
+}
+
+message AddFileReply {
+    message File {
+        string path
+        int64 status
+    }
+    repeated File files = 1
+}
+
+message GetFileReq {
+    
+}
+
+message GetFileReply {
+    message File {
+        string path
+        int64 status
+    }
+    repeated File files = 1
+}
