@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option go_package = "api/node/service/v1;v1";
+
+service Node {
+    // 添加节点
+    rpc AddNode(AddNodeReq) returns (AddNodeReply) {}
+
+    // 列出所有节点
+    rpc ListNode(ListNodeReq) returns (ListNodeReply) {}
+
+    // 删除节点
+    rpc DeleteNode(DeleteNodeReq) returns (DeleteNodeReply) {}
+
+    // 上报数据
+    rpc ReportNode(ReportNodeReq) returns (ReportNodeReply) {}
+}
+
+// Node节点数据
+message NodeItem {
+    string uuid = 1;
+}
+
+message AddNodeReq {
+    string uuid = 1;
+}
+
+message AddNodeReply {
+    string uuid = 1;
+    string token = 2;
+}
+
+message ListNodeReq {
+    string token = 1;
+}
+
+message ListNodeReply {
+    repeated NodeItem nodes = 1; 
+}
+
+message DeleteNodeReq {
+    string token = 1;
+}
+
+message DeleteNodeReply {
+}
+
+message ReportNodeReq {
+    string token = 1;
+}
+
+message ReportNodeReply {
+}
