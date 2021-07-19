@@ -3,25 +3,43 @@ package main
 import (
 	"fmt"
 	"lithum/conf"
+	"lithum/vpn"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
+
+	"golang.org/x/net/context"
 )
 
-func init() {
-
-}
-
 func main() {
-	Config, err := conf.ReadConfig("configs.yaml")
-	if err != nil {
+
+	if err := conf.InitConfig("configs.yaml"); err != nil {
 		panic(err)
 	}
 
-	fmt.Println(Config)
+	context, cancel := context.WithCancel(context.Background())
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGINT)
+	var wg sync.WaitGroup
 
-	switch Config.Type {
+	switch conf.Config.Type {
 	case "server":
-		fmt.Println("server")
+		wg.Add(1)
+		vpnServer := vpn.NewVPNServer(context, &wg)
+		go vpnServer.Run()
 
 	case "client":
 		fmt.Println("client")
 	}
+
+	switch <-c {
+	case syscall.SIGINT:
+		fmt.Println("cancel the main gorouting")
+		cancel()
+	}
+
+	wg.Wait()
+
+	fmt.Println("all gorouting exit")
 }

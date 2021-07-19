@@ -24,14 +24,14 @@ type config struct {
 
 var Config config
 
-func ReadConfig(path string) (c *config, err error) {
+func InitConfig(path string) error {
 	content, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	err = yaml.Unmarshal(content, &Config)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &Config, nil
+	return nil
 }
