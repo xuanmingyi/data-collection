@@ -1,4 +1,4 @@
-module github.com/xuanmingyi/data-collection
+module lithum
 
 go 1.16
 
