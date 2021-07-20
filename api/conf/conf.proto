@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "api/conf;conf";
+
+service Conf {
+    rpc GetConf(GetConfReq) returns (GetConfReply) {}
+}
+
+message GetConfReq {
+    int64 tid = 1;
+    string uuid = 2;
+}
+
+message GetConfReply {
+    int64 tid = 1;
+    string uuid = 2;
+    string content = 3;
+}

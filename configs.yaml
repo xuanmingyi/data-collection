@@ -2,7 +2,10 @@ type: server
 server:
   listen: 0.0.0.0
   port: 9090
+  conf_sever: enable
 
-client:
-  server: server.lithum.tech
-  port: 9090
+clients:
+  - uuid: 061aabc4-ed98-4d4c-8b3e-413bf181e3e1
+    name: s1
+  - uuid: 0d53211b-ce56-483f-b460-e70eea4b8d83
+    name: s2

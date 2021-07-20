@@ -1,6 +1,0 @@
-etcd:
-  host: 172.16.0.105
-  port: 2379
-  auth: false
-  username: admin
-  password: admin

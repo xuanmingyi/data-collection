@@ -1,27 +1,11 @@
 #!/bin/bash
 
-#for i in `find api -name *.proto|xargs`;do
-#    protoc --proto_path=. --proto_path=third_party --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. $i
-#    protoc --proto_path=. --proto_path=third_party --go_out=paths=source_relative:. --go-http_out=paths=source_relative:. $i
-#done
+for i in `find api -name *.proto|xargs`;do
+    protoc --proto_path=. --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. $i
+done
 
-#cd app/file
+# 服务器
+go run lithum.go -conf configs.yaml
 
-#for i in `find . -name *.proto|xargs`;do
-#    protoc --proto_path=. --go_out=paths=source_relative:. --go-http_out=paths=source_relative:. $i
-#done
-
-
-#cd internal/data
-#ent generate ./ent/schema
-#cd ../..
-
-#cd cmd/server
-#wire
-#cd ../..
-
-#mkdir -p bin
-#go build -ldflags "-X main.Version=0.0.1" -o ./bin/ ./...
-#./bin/server -conf configs/config.yaml
-
-go run lithum.go
+# 客户端
+go run lithum.go -conf grpc://127.0.0.1:9090?uuid=061aabc4-ed98-4d4c-8b3e-413bf181e3e1
